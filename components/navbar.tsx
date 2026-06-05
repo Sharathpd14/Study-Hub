@@ -7,7 +7,6 @@ export function Navbar() {
         <Link className="brand" href="/">StudyHub</Link>
         <nav className="nav-links" aria-label="Main navigation">
           <Link href="/about">About</Link>
-          {/* <Link href="/resources">Resources</Link> */}
           <Link href="/dashboard">Dashboard</Link>
           <Link href="/notes">Notes</Link>
           <Link href="/tasks">Tasks</Link>

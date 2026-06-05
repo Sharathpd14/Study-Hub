@@ -1,10 +1,10 @@
 # StudyHub - Student Productivity Platform
 
-A full-stack Next.js application for managing study notes, tracking tasks, and organizing learning resources. This project demonstrates key Next.js concepts including file-based routing, server-side rendering, static generation, API routes, and server actions.
+A full-stack Next.js application for managing study notes and tracking tasks. This project demonstrates key Next.js concepts including file-based routing, server-side rendering, static generation, API routes, and server actions.
 
 ## 🎯 Project Overview
 
-StudyHub is a **simple educational demonstration** of Next.js concepts learned in the Web Development Cohort. It's a productivity tool designed for students to centralize their academic workflow. Users can create and manage study notes, organize tasks with priorities and deadlines, browse curated learning resources, and track their progress.
+StudyHub is a **simple educational demonstration** of Next.js concepts learned in the Web Development Cohort. It's a productivity tool designed for students to centralize their academic workflow. Users can create and manage study notes, organize tasks with priorities and deadlines, and track their progress.
 
 **⚠️ Note:** This is a learning project focused on demonstrating Next.js concepts. **Authentication is NOT implemented** - all features are publicly accessible to showcase routing, rendering strategies, API design, and server actions.
 
@@ -48,18 +48,12 @@ StudyHub is a **simple educational demonstration** of Next.js concepts learned i
 - Toggle task completion
 - Visual priority indicators
 
-### 3. Resource Library
-- Browse curated learning resources
-- Filter resources by category
-- Direct links to external resources
-- Resource details view with descriptions
-
-### 4. Dashboard
+### 3. Dashboard
 - Real-time statistics (total notes, tasks, completed tasks)
 - Quick action buttons
 - Overview of user's study progress
 
-### 5. User Experience
+### 4. User Experience
 - Responsive design for all devices
 - Clean, modern UI with hover effects
 - Empty states with helpful messages
@@ -96,10 +90,6 @@ StudyHub/
 │   │   ├── page.tsx             # Home page
 │   │   ├── about/
 │   │   │   └── page.tsx         # About page
-│   │   ├── resources/
-│   │   │   ├── page.tsx         # Resources listing (ISR)
-│   │   │   └── [id]/
-│   │   │       └── page.tsx     # Resource details
 │   │   └── docs/
 │   │       └── [[...slug]]/
 │   │           └── page.tsx     # Documentation (catch-all)
@@ -112,10 +102,6 @@ StudyHub/
 │   │   │   ├── route.ts         # GET all, POST create
 │   │   │   └── [id]/
 │   │   │       └── route.ts     # GET, PUT, DELETE single
-│   │   └── resources/
-│   │       ├── route.ts         # GET all, POST create
-│   │       └── [id]/
-│   │           └── route.ts     # GET, PUT, DELETE single
 │   ├── layout.tsx               # Root layout
 │   ├── error.tsx                # Error boundary
 │   ├── not-found.tsx            # 404 page
@@ -134,8 +120,7 @@ StudyHub/
 │   └── task.actions.ts          # Task server actions
 ├── services/                     # Data services
 │   ├── note.service.ts          # Note database operations
-│   ├── task.service.ts          # Task database operations
-│   └── resource.service.ts      # Resource database operations
+│   └── task.service.ts          # Task database operations
 ├── lib/
 │   ├── db.ts                    # Database connection
 │   ├── validators.ts            # Data validation helpers
@@ -256,19 +241,6 @@ CREATE TABLE Task {
 }
 ```
 
-#### Resources Table
-```sql
-CREATE TABLE Resource {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  link        String
-  category    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-```
-
 ### Setup Steps
 1. Create a PostgreSQL database (use Neon for free hosting)
 2. Get your `DATABASE_URL` connection string
@@ -285,8 +257,6 @@ CREATE TABLE Resource {
 |-------|------|-----------|
 | `/` | Home/Landing | SSR |
 | `/about` | About StudyHub | SSG |
-| `/resources` | Resources List | ISR (120s revalidate) |
-| `/resources/[id]` | Resource Details | ISR |
 | `/docs` | Documentation | SSR |
 | `/docs/[...slug]` | Nested Documentation | SSR |
 
@@ -324,15 +294,6 @@ PUT     /api/tasks/[id]         - Update task
 DELETE  /api/tasks/[id]         - Delete task
 ```
 
-### Resources API
-```
-GET     /api/resources          - Get all resources
-POST    /api/resources          - Create new resource (admin)
-GET     /api/resources/[id]     - Get specific resource
-PUT     /api/resources/[id]     - Update resource
-DELETE  /api/resources/[id]     - Delete resource
-```
-
 ### API Response Format
 All endpoints return structured JSON responses:
 
@@ -340,7 +301,7 @@ All endpoints return structured JSON responses:
 ```json
 {
   "success": true,
-  "data": { /* resource data */ }
+  "data": { /* item data */ }
 }
 ```
 
@@ -441,23 +402,13 @@ export default async function AboutPage() {
 ```
 
 ### 3. Incremental Static Regeneration (ISR)
-**Pages:** Resources list
+**Pages:** Documentation pages
 
 **Why:**
-- Resources change but not frequently
+- Content doesn't change frequently
 - Want fast loading for public
-- Revalidate periodically (every 2 minutes)
+- Revalidate periodically as needed
 - Balance between freshness and performance
-
-**Implementation:**
-```tsx
-export const revalidate = 120; // Revalidate every 2 minutes
-
-export default async function ResourcesPage() {
-  const resources = await getResources();
-  return <ResourcesGrid resources={resources} />;
-}
-```
 
 ---
 
@@ -500,13 +451,13 @@ This project demonstrates the following concepts from **Next.js Lesson 1** and *
 - Fast loading from cache
 
 ### 6. Incremental Static Regeneration (ISR) ✅
-- Resources page revalidated every 2 minutes
-- `export const revalidate = 120`
+- Documentation pages revalidated periodically
+- `export const revalidate = 3600` (1 hour)
 - Balance between static performance and fresh data
 - On-demand revalidation
 
 ### 7. API Routes ✅
-- RESTful endpoints for notes, tasks, resources
+- RESTful endpoints for notes and tasks
 - GET, POST, PUT/PATCH, DELETE methods
 - Type-safe with TypeScript
 - Structured error handling
@@ -543,7 +494,7 @@ This project demonstrates the following concepts from **Next.js Lesson 1** and *
 
 ### 12. API Routes vs Server Actions (Clear Distinction) ✅
 - **API Routes:** Used for explicit REST endpoints
-  - Notes, tasks, resources endpoints
+  - Notes and tasks endpoints
   - Can be called from external clients (Postman, curl)
   - Stateless operations
   - Use for public APIs
@@ -572,9 +523,9 @@ This project demonstrates the following concepts from **Next.js Lesson 1** and *
 - ISR for semi-dynamic content
 
 ### 3. Proper API Design
-- RESTful endpoints
+- RESTful endpoints (notes and tasks)
 - Consistent naming conventions
-- Proper HTTP methods
+- Proper HTTP methods (GET, POST, PUT, DELETE)
 - Structured error responses
 
 ### 4. Database Integration
@@ -604,7 +555,6 @@ This project demonstrates the following concepts from **Next.js Lesson 1** and *
 - Single-user/public data model (all data is viewable and modifiable)
 - No user isolation or data privacy concerns
 - Simple text-based storage without file uploads
-- Resources are manually curated/read-only
 
 ### Known Limitations ⚠️
    - This is an educational demonstration project
@@ -622,12 +572,7 @@ This project demonstrates the following concepts from **Next.js Lesson 1** and *
    - Keeps database simple for learning
    - Can add S3/Cloudinary integration for production
 
-4. **Limited Resource Management**
-   - Resources are read-only for users
-   - Only for demonstrating ISR strategy
-   - No admin interface
-
-5. **No Real-time Updates**
+4. **No Real-time Updates**
    - Page requires refresh for new data
    - Demonstrates ISR and SSR concepts clearly
    - Can add WebSocket/Supabase realtime for production
@@ -670,7 +615,7 @@ This project demonstrates the following concepts from **Next.js Lesson 1** and *
 
 1. Add user authentication (Clerk or NextAuth.js)
 2. Implement rich text editor for notes
-3. Add file upload for resources
+3. Implement file uploads
 4. Real-time collaboration with WebSockets
 5. Dark mode support
 6. Export notes as PDF

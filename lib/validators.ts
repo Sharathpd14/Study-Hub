@@ -11,11 +11,3 @@ export const taskSchema = z.object({
   priority: z.enum(["low", "medium", "high"]).default("medium"),
   dueDate: z.string().optional().transform((value) => (value ? new Date(value) : undefined))
 });
-
-export const resourceSchema = z.object({
-  title: z.string().trim().min(2),
-  description: z.string().trim().min(5),
-  category: z.string().trim().min(2),
-  link: z.string().url(),
-  slug: z.string().trim().min(2)
-});

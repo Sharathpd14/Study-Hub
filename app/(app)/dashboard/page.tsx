@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { getNotes } from "@/services/note.service";
-import { getResources } from "@/services/resource.service";
 import { getTasks } from "@/services/task.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [notes, tasks, resources] = await Promise.all([getNotes(), getTasks(), getResources()]);
+  const [notes, tasks] = await Promise.all([getNotes(), getTasks()]);
   const completed = tasks.filter((task) => task.status === "completed").length;
   const pending = tasks.filter((task) => task.status === "pending").length;
 

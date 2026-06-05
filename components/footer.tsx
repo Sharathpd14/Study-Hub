@@ -12,9 +12,8 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 style={{ fontSize: "0.8rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.3px", marginBottom: "8px", color: "var(--ink)" }}>Resources</h4>
+            <h4 style={{ fontSize: "0.8rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.3px", marginBottom: "8px", color: "var(--ink)" }}>Info</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
-              <li><a href="/resources" style={{ color: "var(--muted)", fontSize: "0.8rem", transition: "color 0.2s" }}>Learning Hub</a></li>
               <li><a href="/about" style={{ color: "var(--muted)", fontSize: "0.8rem", transition: "color 0.2s" }}>About</a></li>
               <li><a href="/docs" style={{ color: "var(--muted)", fontSize: "0.8rem", transition: "color 0.2s" }}>Docs</a></li>
             </ul>
